@@ -5,13 +5,17 @@ class ListsController < ApplicationController
   end
   
   def create
-    # 1.&2.データを受け取り新規登録するためのインスタンス作成
-    list = List.new(list_params)
-    # 3.データをデータベースに保存するためのsaveメッソド実行
-    list.save
-    # redirect_to '/top'を削除して、以下コードに変更
-    # 詳細画面へリダイレクト
-    redirect_to list_path(list.id) #引数の(list.id)をつけないとエラー
+    # 1.データを受け取り新規登録するためのインスタンス作成
+    @list = List.new(list_params)
+    # 2.データをデータベースに保存するためのsaveメッソド実行
+    if @list.save
+      flash[:notice] = "投稿に成功しました。"
+      redirect_to list_path(@list.id) #引数の(list.id)をつけないとエラー
+    else
+      # 3.フラッシュメッセージを定義し、new.html.erbを描写する
+      flash.now[:notice] = "投稿に失敗しました。"
+      render :new
+    end
   end
 
   def index
@@ -30,15 +34,6 @@ class ListsController < ApplicationController
     list = List.find(params[:id])
     list.update(list_params)
     redirect_to list_path(list.id)
-  end
-  
-  def create
-    @list = List.new(list_params)
-    if @list.save
-      redirect_to list_path(@list.id)
-    else
-      render :new
-    end
   end
   
   def destroy
