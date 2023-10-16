@@ -13,7 +13,7 @@ class ListsController < ApplicationController
       redirect_to list_path(@list.id) #引数の(list.id)をつけないとエラー
     else
       # 3.フラッシュメッセージを定義し、new.html.erbを描写する
-      flash.now[:notice] = "投稿に失敗しました。"
+      flash.now[:alert] = "投稿に失敗しました。" #キーをalertに変更
       render :new
     end
   end
